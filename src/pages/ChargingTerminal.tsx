@@ -1,5 +1,6 @@
 import { useState, useRef, FormEvent } from "react";
 import { Zap, Leaf, Settings, CheckCircle2, Loader2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -177,8 +178,21 @@ const ChargingTerminal = () => {
     <div className="min-h-screen flex items-center justify-center p-6">
       <div className="glass-card max-w-2xl w-full p-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">EcoCharge AI</h1>
-          <p className="text-muted-foreground">Smart Grid Charging Terminal</p>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex-1" />
+            <div className="flex-1 text-center">
+              <h1 className="text-4xl font-bold text-foreground mb-2">EcoCharge AI</h1>
+              <p className="text-muted-foreground">Smart Grid Charging Terminal</p>
+            </div>
+            <div className="flex-1 flex justify-end">
+              <Link 
+                to="/admin/dashboard" 
+                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                Admin →
+              </Link>
+            </div>
+          </div>
         </div>
 
         <form onSubmit={handleConnect} className="space-y-8">
