@@ -60,12 +60,25 @@ const ChargingTerminal = () => {
 
   const handleConnect = async (e: FormEvent) => {
     e.preventDefault();
+    console.log("🚀 [CONNECT] Button clicked - Starting connection process");
+    console.log("📋 [VALIDATION] Vehicle number validation status:", {
+      box1,
+      box2,
+      box3,
+      box4,
+      vehicleNumber,
+      isValidVehicle,
+    });
+
     if (!isValidVehicle) {
+      console.error("❌ [VALIDATION] Invalid vehicle number format");
       toast.error("Please enter a valid vehicle number");
       return;
     }
 
+    console.log("✅ [VALIDATION] Vehicle number is valid, proceeding...");
     setLoading(true);
+
     try {
       const payload: any = {
         vehicle_number: vehicleNumber,
@@ -76,13 +89,33 @@ const ChargingTerminal = () => {
         payload.custom_kwh = customKwh;
       }
 
+      console.log("📤 [API REQUEST] Sending payload to server:", {
+        endpoint: `${API_BASE}/connect`,
+        method: "POST",
+        payload: JSON.stringify(payload, null, 2),
+      });
+
       const response = await axios.post(`${API_BASE}/connect`, payload);
+      
+      console.log("✅ [API SUCCESS] Received response from server:", {
+        status: response.status,
+        data: response.data,
+      });
+
       setInvoice(response.data);
       toast.success("Vehicle connected successfully!");
     } catch (error: any) {
+      console.error("❌ [API ERROR] Connection failed:", {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        fullError: error,
+      });
       toast.error(error.response?.data?.detail || "Connection failed");
     } finally {
       setLoading(false);
+      console.log("🏁 [CONNECT] Connection process completed");
     }
   };
 
