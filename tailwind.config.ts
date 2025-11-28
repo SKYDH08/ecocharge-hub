@@ -57,6 +57,22 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        renewable: {
+          DEFAULT: "hsl(var(--renewable))",
+          glow: "hsl(var(--renewable-glow))",
+        },
+        conventional: {
+          DEFAULT: "hsl(var(--conventional))",
+          dark: "hsl(var(--conventional-dark))",
+        },
+        paused: "hsl(var(--paused))",
+        chart: {
+          "1": "hsl(var(--chart-1))",
+          "2": "hsl(var(--chart-2))",
+          "3": "hsl(var(--chart-3))",
+          "4": "hsl(var(--chart-4))",
+          "5": "hsl(var(--chart-5))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
