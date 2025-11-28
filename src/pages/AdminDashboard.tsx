@@ -35,37 +35,58 @@ const AdminDashboard = () => {
   const [loginLoading, setLoginLoading] = useState(false);
   const [stats, setStats] = useState<DashboardStats | null>(null);
 
+  // Check for existing auth token on mount
+  useEffect(() => {
+    console.log("🔐 [ADMIN] Checking for existing auth token...");
+    const token = localStorage.getItem("admin_token");
+    if (token) {
+      console.log("✅ [ADMIN] Found existing token, auto-authenticating");
+      setIsAuthenticated(true);
+    } else {
+      console.log("❌ [ADMIN] No token found, showing login screen");
+    }
+  }, []);
+
   // Real-time polling
   useEffect(() => {
     if (!isAuthenticated) return;
+    console.log("📊 [ADMIN] Starting real-time polling...");
 
     const fetchStats = async () => {
+      console.log("🔄 [ADMIN] Fetching dashboard stats...");
       try {
         const response = await axios.get(`${API_BASE}/admin/dashboard_stats`);
+        console.log("✅ [ADMIN] Stats fetched successfully:", response.data);
         setStats(response.data);
       } catch (error) {
-        console.error("Failed to fetch stats:", error);
+        console.error("❌ [ADMIN] Failed to fetch stats:", error);
       }
     };
 
     fetchStats();
     const interval = setInterval(fetchStats, 2000);
 
-    return () => clearInterval(interval);
+    return () => {
+      console.log("🛑 [ADMIN] Stopping real-time polling");
+      clearInterval(interval);
+    };
   }, [isAuthenticated]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("🔐 [ADMIN] Login attempt:", { username });
     setLoginLoading(true);
     try {
       const response = await axios.post(`${API_BASE}/admin/login`, {
         username,
         password,
       });
+      console.log("✅ [ADMIN] Login successful:", response.data);
       localStorage.setItem("admin_token", response.data.token);
       setIsAuthenticated(true);
       toast.success("Login successful!");
     } catch (error: any) {
+      console.error("❌ [ADMIN] Login failed:", error.response?.data);
       toast.error(error.response?.data?.detail || "Login failed");
     } finally {
       setLoginLoading(false);
